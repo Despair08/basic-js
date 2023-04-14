@@ -19,9 +19,11 @@ const HALF_LIFE_PERIOD = 5730;
  */
 function dateSample(str) {
   if(str === undefined) return false;
-  str = Number(str);
-  if(str !== number) return false;
-  return str;
+  if(typeof(str)!=='string')return false;
+  let num = Number(str);
+  if (isNaN(num) || num === Infinity)return false;
+  let t = 0.963/num;
+  return t;
 }
 
 module.exports = {
