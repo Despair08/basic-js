@@ -17,13 +17,18 @@ const HALF_LIFE_PERIOD = 5730;
  * dateSample('WOOT!') => false
  *
  */
-function dateSample(str) {
-  if(str === undefined) return false;
-  if(typeof(str)!=='string')return false;
-  let num = Number(str);
-  if (isNaN(num) || num === Infinity)return false;
-  let t = 0.963/num;
-  return t;
+function dateSample(sampleActivity) {
+  const MODERN_ACTIVITY = 15;
+  const HALF_LIFE_PERIOD = 5730;
+  activity = Number(sampleActivity)
+
+  if(!sampleActivity) return false;
+  if(typeof(sampleActivity)!=='string') return false;
+  if(isNaN(sampleActivity)||activity<=0||sampleActivity>MODERN_ACTIVITY) return false;
+
+  let constant = 0.693/HALF_LIFE_PERIOD;
+
+  return Math.ceil(Math.log(MODERN_ACTIVITY/activity)/constant);
 }
 
 module.exports = {
