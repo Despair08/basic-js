@@ -14,53 +14,60 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 function transform(arr) {
-  if (!Array.isArray(arr)) {
-    throw new Error("'arr' parameter must be an instance of the Array!");
-  }
 
-  if (arr.length === 0) {
-    return arr;
-  }
+  if (!Array.isArray(arr)) throw new Error("'arr' parameter must be an instance of the Array!");
+
+  if (arr.length === 0) return arr;
 
   let resultArray = [];
-  let doubleNext = '--double-next';
-  let doublePrev = '--double-prev';
-  let discPrev = '--discard-prev';
-  let discNext = '--discard-next';
 
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i]!==doubleNext||arr[i]!==doublePrev||arr[i]!==discNext||arr[i]!==discPrev||arr[i]!==undefined) {
-      resultArray.push(arr[i]);
-    }
-    if (arr[i] === '--double-next') {
-      if (typeof (arr[i + 1]) === 'number'){
-        resultArray.push(arr[i + 1]);
-      }else {
+
+    let elem = arr[i];
+    // Пропустить если команда на первой позиции
+    if (i === 0) {
+      if (arr[i] === '--discard-prev' || arr[i] === '--double-prev') {
+
+        console.log(`Пропуск первой позиции`, { i }, { elem })
         i++;
       }
     }
+
+    // дублировать, если команда не на последней позиции
+    if (arr[i] === '--double-next' && arr[i] !== arr[arr.length - 1]) {
+      console.log(`Дублирую следующий`, { i }, { elem })
+      resultArray.push(arr[i + 1]);
+    }
+
+    // дублировать предыдущий
     if (arr[i] === '--double-prev') {
-      if (typeof (arr[i - 1]) === 'number'){
-        resultArray.push(arr[i - 1]);
-      }else {
-        i++;
-      }
+      console.log(`Дублирую предыдущий`, { i }, { elem })
+      resultArray.push(arr[i - 1]);
+      i++;
     }
+
+    // убрать предыдущий
     if (arr[i] === '--discard-prev') {
-      if (typeof (arr[i - 1]) === 'number'){
-        resultArray.splice(i - 1, 1);
-      }else{
-        i++
-      }
+      console.log(`Удаляю предыдущий`, { i }, { elem })
+      resultArray.pop();
     }
-    if (arr[i] === '--discard-next' && typeof (arr[i + 1]) === 'number') {
-      if (typeof (arr[i + 1]) === 'number'){
-        i++;
-      } else {
-        resultArray.push(arr[i]);
-      }
+
+    // убрать следующий, если не на последней позиции
+    if (arr[i] === '--discard-next' && arr[i] !== arr[arr.length - 1]) {
+      console.log(`Удаляю следующий`, { i }, { elem })
+      i += 2;
     }
-  };
+
+    resultArray.push(arr[i]);
+
+
+    // убрать команду с последней позиции
+    if (resultArray[resultArray.length - 1] === '--discard-next' || resultArray[resultArray.length - 1] === '--double-next' || resultArray[resultArray.length - 1] === '--discard-prev' || resultArray[resultArray.length - 1] === '--double-prev') {
+      console.log(`Удаляю последний`, { i }, { elem })
+      resultArray.pop();
+    }
+  }
+
 
   return resultArray;
 }
