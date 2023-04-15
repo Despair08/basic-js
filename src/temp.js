@@ -1,43 +1,26 @@
-let str = true;
-let options = { repeatTimes: 3, separator: '??? ', addition: false, additionRepeatTimes: 2, additionSeparator: '!!!' };
-// 'truefalse!!!false??? truefalse!!!false??? truefalse!!!false'
+let matrix = [
+  [0, 1, 1, 2],
+  [0, 5, 0, 0],
+  [2, 0, 3, 3],
+];
 
-function repeater(str, options) {
+function getMatrixElementsSum(matrix) {
+  let result = 0;
 
-  str = str.toString();
-
-  let arr = [];
-  let addition = options.addition.toString();
-
-  if (addition) {
-
-    if (!options.additionRepeatTimes) {
-      str += addition;
-    } else {
-      if (options.additionSeparator) {
-        let addArr = [];
-
-        for (let i = 0; i < options.additionRepeatTimes; i++) {
-          addArr.push(addition)
+  for(let i = 0; i < matrix.length; i++){
+    for(let k = 0; k < matrix[i].length; k++){
+      console.log({i})
+      if(i > 0){
+        if(matrix[i-1][k] !== 0){
+          result += matrix[i][k];
         }
-        addition = addArr.join(`${options.additionSeparator}`);
+      }else{
+        result += matrix[i][k];
       }
-      str += addition;
-
     }
   }
-
-  if (!options.repeatTimes) {
-    arr.push(str);
-  } else {
-    for (let i = 0; i < options.repeatTimes; i++) {
-      arr.push(str);
-    }
-  }
-
-  options.separator ? result = arr.join(`${options.separator}`) : result = arr.join('+')
 
   return result;
 }
 
-console.log(repeater(str, options));
+console.log(getMatrixElementsSum(matrix));
